@@ -2,10 +2,12 @@ package com.firago.serg.prototypes;
 
 import com.badlogic.gdx.graphics.Texture;
 
-class PrototypeTextureProvider {
+import java.security.InvalidParameterException;
+
+public class PrototypeTextureProvider {
     private static final PrototypeTextureProvider ourInstance = new PrototypeTextureProvider();
 
-    static PrototypeTextureProvider getInstance() {
+    public static PrototypeTextureProvider getInstance() {
         return ourInstance;
     }
 
@@ -29,8 +31,8 @@ class PrototypeTextureProvider {
             case MAYA1: return maya1;
             case MAYA2: return maya2;
             case MAYA3: return maya3;
+            default: throw new InvalidParameterException("Prototype = "+prototype);
 
         }
-        return null;
     }
 }

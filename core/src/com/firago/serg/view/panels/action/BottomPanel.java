@@ -1,4 +1,4 @@
-package com.firago.serg.view.panels;
+package com.firago.serg.view.panels.action;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,7 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.SnapshotArray;
-import com.firago.serg.DesktopGroup;
+import com.firago.serg.view.desktop.DesktopGroup;
+import com.firago.serg.view.panels.Panel;
 
 
 public class BottomPanel extends Panel {

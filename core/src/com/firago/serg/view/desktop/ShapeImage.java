@@ -1,4 +1,4 @@
-package com.firago.serg.view;
+package com.firago.serg.view.desktop;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -10,32 +10,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.firago.serg.prototypes.Prototype;
+import com.firago.serg.prototypes.PrototypeTextureProvider;
 
 public class ShapeImage extends Image {
     private final SpriteDrawable sprite;
     int scale = 0;
-    public void rotate() {
-        this.rotateBy(45f);
-    }
-    public void scale(){
-        scale %=7;
-        int v = scale;
-        v -=3;
-        float scaleValue = 1.0f / (1.0f - v/4.0f);
-        setScale(scaleValue);
-        scale++;
-    }
-
-    public void flip() {
-        Drawable drawable = getDrawable();
-        if (drawable instanceof SpriteDrawable) {
-            ((SpriteDrawable)drawable).getSprite().flip(true, false);
-        }
-        setRotation(-getRotation());
-    }
 
     class ActorListener extends DragListener{
         private Vector2 clickCoordinate = new Vector2();
+        private Vector2 position = new Vector2();
+
         @Override
         public void dragStart(InputEvent event, float x, float y, int pointer) {
             clickCoordinate.set(x,y);
@@ -45,11 +29,10 @@ public class ShapeImage extends Image {
 
         @Override
         public void drag(InputEvent event, float x, float y, int pointer) {
-            Vector2 newPosition = new Vector2(-clickCoordinate.x, -clickCoordinate.y);
-            newPosition.rotate(-getRotation());
-            newPosition.add(x,y);
-            newPosition.rotate(getRotation());
-            moveBy(newPosition.x, newPosition.y);
+            position.set(x,y).sub(clickCoordinate);
+            position.rotate(getRotation());
+
+            moveBy(position.x, position.y);
 
         }
     }
@@ -60,9 +43,8 @@ public class ShapeImage extends Image {
     public ShapeImage(Prototype prototype) {
         super();
         sprite = new SpriteDrawable(new Sprite(
-                SpriteFabric.getTexture(prototype)));
+                PrototypeTextureProvider.getInstance().getTexture(prototype)));
         setDrawable(sprite);
-//        spriteFlip = new SpriteDrawable(SpriteFabric.getSprite(prototype));
         setWidth(100);
         setHeight(100);
         setOrigin(getWidth()/2, getHeight()/2);
@@ -96,4 +78,25 @@ public class ShapeImage extends Image {
         batch.begin();
 
     }
+
+    public void rotate() {
+        this.rotateBy(45f);
+    }
+    public void scale(){
+        scale %=7;
+        int v = scale;
+        v -=3;
+        float scaleValue = 1.0f / (1.0f - v/4.0f);
+        setScale(scaleValue);
+        scale++;
+    }
+
+    public void flip() {
+        Drawable drawable = getDrawable();
+        if (drawable instanceof SpriteDrawable) {
+            ((SpriteDrawable)drawable).getSprite().flip(true, false);
+        }
+        setRotation(-getRotation());
+    }
+
 }
