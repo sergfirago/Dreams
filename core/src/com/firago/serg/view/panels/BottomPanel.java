@@ -3,7 +3,7 @@ package com.firago.serg.view.panels;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -13,17 +13,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.firago.serg.DesktopGroup;
 
-import java.awt.Rectangle;
 
-public class BottomPanel extends Group {
+public class BottomPanel extends Panel {
     private final float buttonSize;
 
     public BottomPanel(Rectangle actionPanel, final DesktopGroup group, float buttonSize) {
+        super(new Image(new Texture("panel2.png")));
         this.buttonSize = buttonSize;
-        Image image = new Image(new Texture("panel2.png"));
-        image.setBounds(actionPanel.x, actionPanel.y, actionPanel.width, actionPanel.height);
-        image.setTouchable(Touchable.disabled);
-        addActor(image);
+
+        background.setBounds(actionPanel.x, actionPanel.y, actionPanel.width, actionPanel.height);
+        background.setTouchable(Touchable.disabled);
+        addActor(background);
 
         addActionButton(20, 20, "cross.png", "cross2.png",
                 new InputListener(){
@@ -64,7 +64,7 @@ public class BottomPanel extends Group {
         button.getStyle().imageDown = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal(downFile))));
         button.setBounds(x, y, buttonSize, buttonSize);
         button.addListener(listener);
-        addActor(button);
+        getItems().addActor(button);
     }
 
 }

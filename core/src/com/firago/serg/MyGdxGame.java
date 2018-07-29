@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -15,14 +14,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.firago.serg.logic.Prototype;
 import com.firago.serg.view.SpriteFabric;
+import com.firago.serg.view.panels.BottomPanel;
 
 class SizeGame {
     private float width;
@@ -101,6 +98,7 @@ public class MyGdxGame extends ApplicationAdapter {
     private Group panel;
 //    private Group bottomPanel;
     private SizeGame sizeGame;
+    private BottomPanel bottomPanel;
 
     @Override
     public void create() {
@@ -124,6 +122,7 @@ public class MyGdxGame extends ApplicationAdapter {
         stage.addActor(panel);
 
         initBottom();
+
         initText();
         stage.addActor(text);
 
@@ -132,63 +131,20 @@ public class MyGdxGame extends ApplicationAdapter {
     private void initBottom() {
         Rectangle actionPanel = sizeGame.getActionPanel();
 
-        Group bottomPanel = createBottomPanel(actionPanel);
+        bottomPanel = createBottomPanel(actionPanel);
 
         bottomPanel.setBounds(actionPanel.x, actionPanel.y, actionPanel.width, actionPanel.height);
         stage.addActor(bottomPanel);
 
     }
 
-    private Group createBottomPanel(Rectangle actionPanel) {
-        Group bottomPanel = new Group();
-        Image image = new Image(new Texture("panel2.png"));
-        image.setBounds(actionPanel.x, actionPanel.y, actionPanel.width, actionPanel.height);
-        image.setTouchable(Touchable.disabled);
-        bottomPanel.addActor(image);
-
-        addActionButton(bottomPanel,20, 20, "cross.png", "cross2.png",
-                new InputListener(){
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        group.deleteActiveItem();
-                        return true;
-                    }
-                });
-
-        addActionButton(bottomPanel, 110,20,"mirror.png", "mirror.png",
-                new InputListener(){
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        group.reflectActiveItem();
-                        return true;
-                    }
-                });
-        addActionButton(bottomPanel,200, 20, "mirror.png", "mirror.png",
-                new InputListener(){
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        group.scaleActiveItem();
-                        return true;
-                    }
-                });
-        addActionButton(bottomPanel, 290, 20, "mirror.png", "mirror.png", new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                group.flipActiveItem();
-                return true;
-            }
-        });
+    private BottomPanel createBottomPanel(Rectangle actionPanel) {
+        Rectangle panel = new Rectangle(sizeGame.getActionPanel());
+        BottomPanel bottomPanel = new BottomPanel(panel, group, sizeGame.getButtonSize());
         return bottomPanel;
     }
 
-    private void addActionButton(Group panel, float x, float y, String upFile, String downFile, InputListener listener) {
-        ImageButton button = new ImageButton(new Skin(Gdx.files.internal("button.json")));
-        button.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal(upFile))));
-        button.getStyle().imageDown = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal(downFile))));
-        button.setBounds(x, y, sizeGame.getButtonSize(), sizeGame.getButtonSize());
-        button.addListener(listener);
-        panel.addActor(button);
-    }
+
 
     private void initPanel() {
         panel = new Group();
@@ -259,7 +215,7 @@ public class MyGdxGame extends ApplicationAdapter {
         // See below for what true means.
         stage.getViewport().update(width, height, true);
         sizeGame.update(width, height);
-
+        bottomPanel.resize(width,100);
         System.out.println("resize "+width +" " +height);
     }
 
