@@ -3,23 +3,17 @@ package com.firago.serg;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.firago.serg.logic.Prototype;
+import com.firago.serg.prototypes.Prototype;
 import com.firago.serg.view.SpriteFabric;
 import com.firago.serg.view.panels.BottomPanel;
+import com.firago.serg.view.panels.ItemPanel;
 
 class SizeGame {
     private float width;
@@ -95,7 +89,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
     private Stage stage;
     private DesktopGroup group;
-    private Group panel;
+    private ItemPanel panel;
 //    private Group bottomPanel;
     private SizeGame sizeGame;
     private BottomPanel bottomPanel;
@@ -118,7 +112,8 @@ public class MyGdxGame extends ApplicationAdapter {
                 sizeGame.getDesktop().width, sizeGame.getDesktop().height);
         stage.addActor(group);
 
-        initPanel();
+//        initPanel();
+        panel = new ItemPanel(group, sizeGame.getSizeItem());
         stage.addActor(panel);
 
         initBottom();
@@ -139,47 +134,46 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     private BottomPanel createBottomPanel(Rectangle actionPanel) {
-        Rectangle panel = new Rectangle(sizeGame.getActionPanel());
-        BottomPanel bottomPanel = new BottomPanel(panel, group, sizeGame.getButtonSize());
+        BottomPanel bottomPanel = new BottomPanel(group, sizeGame.getButtonSize());
         return bottomPanel;
     }
 
 
 
-    private void initPanel() {
-        panel = new Group();
-        Image bg = new Image(new Texture("panel.png"));
-        bg.setTouchable(Touchable.disabled);
-        Rectangle itemPanel = sizeGame.getItemPanel();
-        bg.setBounds(itemPanel.x, itemPanel.y, itemPanel.width, itemPanel.height);
-        panel.addActor(bg);
-        final Image mouse = new Image(SpriteFabric.getTexture(Prototype.MOUSE));
-        mouse.setBounds(20, itemPanel.x + itemPanel.height - sizeGame.getSizeItem() * 2,
-                sizeGame.getSizeItem(), sizeGame.getSizeItem());
-        panel.addActor(mouse);
-        final Image cheese = new Image(SpriteFabric.getTexture(Prototype.CHEESE));
-        cheese.setBounds(20, itemPanel.x + itemPanel.height - sizeGame.getSizeItem() * 4,
-                sizeGame.getSizeItem(), sizeGame.getSizeItem());
-        panel.addActor(cheese);
-        panel.setBounds(itemPanel.x, itemPanel.y, itemPanel.width, itemPanel.height);
-        panel.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Actor actor = panel.hit(x, y, true);
-                group.setSelected(false);
-                if (actor == mouse) {
-                    group.newActor(Prototype.MOUSE);
-                    return true;
-                }
-                if (actor == cheese) {
-                    group.newActor(Prototype.CHEESE);
-                    return true;
-                }
-                return super.touchDown(event, x, y, pointer, button);
-            }
-        });
-
-    }
+//    private void initPanel() {
+//        panel = new ItemPanel()Group();
+//        Image bg = new Image(new Texture("panel.png"));
+//        bg.setTouchable(Touchable.disabled);
+//        Rectangle itemPanel = sizeGame.getItemPanel();
+//        bg.setBounds(itemPanel.x, itemPanel.y, itemPanel.width, itemPanel.height);
+//        panel.addActor(bg);
+//        final Image mouse = new Image(SpriteFabric.getTexture(Prototype.MOUSE));
+//        mouse.setBounds(20, itemPanel.x + itemPanel.height - sizeGame.getSizeItem() * 2,
+//                sizeGame.getSizeItem(), sizeGame.getSizeItem());
+//        panel.addActor(mouse);
+//        final Image cheese = new Image(SpriteFabric.getTexture(Prototype.CHEESE));
+//        cheese.setBounds(20, itemPanel.x + itemPanel.height - sizeGame.getSizeItem() * 4,
+//                sizeGame.getSizeItem(), sizeGame.getSizeItem());
+//        panel.addActor(cheese);
+//        panel.setBounds(itemPanel.x, itemPanel.y, itemPanel.width, itemPanel.height);
+//        panel.addListener(new InputListener() {
+//            @Override
+//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//                Actor actor = panel.hit(x, y, true);
+//                group.setSelected(false);
+//                if (actor == mouse) {
+//                    group.newActor(Prototype.MOUSE);
+//                    return true;
+//                }
+//                if (actor == cheese) {
+//                    group.newActor(Prototype.CHEESE);
+//                    return true;
+//                }
+//                return super.touchDown(event, x, y, pointer, button);
+//            }
+//        });
+//
+//    }
 
     private void initText() {
         font = new BitmapFont();
@@ -215,7 +209,15 @@ public class MyGdxGame extends ApplicationAdapter {
         // See below for what true means.
         stage.getViewport().update(width, height, true);
         sizeGame.update(width, height);
-        bottomPanel.resize(width,100);
+        Rectangle actionPanel = sizeGame.getActionPanel();
+        bottomPanel.setButtonSize(sizeGame.getButtonSize());
+        bottomPanel.setBounds(actionPanel.x, actionPanel.y, actionPanel.width, actionPanel.height);
+
+        Rectangle itemPanel = sizeGame.getItemPanel();
+        panel.setItemSize(sizeGame.getSizeItem());
+        panel.setBounds(itemPanel.x, itemPanel.y, itemPanel.width, itemPanel.height);
+        Rectangle desktop = sizeGame.getDesktop();
+        group.setBounds(desktop.x, desktop.y, desktop.width, desktop.height);
         System.out.println("resize "+width +" " +height);
     }
 

@@ -1,29 +1,43 @@
 package com.firago.serg.view.panels;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.SnapshotArray;
 import com.firago.serg.DesktopGroup;
-import com.firago.serg.logic.Prototype;
+import com.firago.serg.prototypes.Prototype;
 import com.firago.serg.view.SpriteFabric;
 
 public class ItemPanel extends Panel {
-    private final Vector2 panelSize;
-    private final float itemSize;
+    public static final int SPACE = 20;
+    private float itemSize;
 
-    public ItemPanel(final DesktopGroup desktopGroup, Vector2 panelSize, float itemSize) {
+    public float getItemSize() {
+        return itemSize;
+    }
+
+    public void setItemSize(float itemSize) {
+        this.itemSize = itemSize;
+    }
+
+    public ItemPanel(final DesktopGroup desktopGroup, float itemSize) {
         super(new Image(new Texture("panel.png")));
-        this.panelSize = panelSize;
         this.itemSize = itemSize;
 
         final Image mouse = new Image(SpriteFabric.getTexture(Prototype.MOUSE));
          addItem(mouse);
         final Image cheese = new Image(SpriteFabric.getTexture(Prototype.CHEESE));
         addItem(cheese);
+
+        final Image maya1 = new Image(SpriteFabric.getTexture(Prototype.MAYA1));
+        addItem(maya1);
+
+        final Image maya2 = new Image(SpriteFabric.getTexture(Prototype.MAYA2));
+        addItem(maya2);
+
+        final Image maya3 = new Image(SpriteFabric.getTexture(Prototype.MAYA3));
+        addItem(maya3);
 
         getItems().addListener(new InputListener() {
             @Override
@@ -38,6 +52,15 @@ public class ItemPanel extends Panel {
                     desktopGroup.newActor(Prototype.CHEESE);
                     return true;
                 }
+                if (actor == maya1){
+                    desktopGroup.newActor(Prototype.MAYA1);
+                }
+                if (actor==maya2){
+                    desktopGroup.newActor(Prototype.MAYA2);
+                }
+                if (actor==maya3){
+                    desktopGroup.newActor(Prototype.MAYA3);
+                }
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
@@ -47,20 +70,23 @@ public class ItemPanel extends Panel {
     }
 
     public void addItem(Image image){
+        image.setWidth(itemSize);
+        image.setHeight(itemSize);
         getItems().addActor(image);
     }
-    @Override
-    public void resize(float width, float height) {
-        super.resize(width, height);
-        SnapshotArray<Actor> children = getItems().getChildren();
-        float y = 20;
-        float startX = (width - itemSize)/2.0f;
-        float itemSize = 50;
 
-        for (Actor child : children) {
-            child.setBounds(startX, y, itemSize, itemSize);
-            y+=itemSize + 20;
+    @Override
+    public void setBounds(float x, float y, float width, float height) {
+        super.setBounds(x, y, width, height);
+        float yPos = getHeight() - SPACE -itemSize;
+        float xPos = (getWidth() - itemSize)/2.0f;
+
+        for (Actor child : getItems().getChildren()) {
+            child.setBounds(xPos, yPos, itemSize, itemSize);
+            System.out.println(child.getX()+" "+child.getY()+" "+ child.getWidth()+" +"+ child.getHeight());
+            yPos-=itemSize + SPACE;
         }
+
     }
 
 }

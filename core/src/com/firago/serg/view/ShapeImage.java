@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.firago.serg.logic.Prototype;
+import com.firago.serg.prototypes.Prototype;
 
 public class ShapeImage extends Image {
     private final SpriteDrawable sprite;

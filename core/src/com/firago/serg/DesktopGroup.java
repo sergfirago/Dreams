@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
-import com.firago.serg.logic.Prototype;
+import com.firago.serg.prototypes.Prototype;
 import com.firago.serg.view.ShapeImage;
 
 class ActorDragListener extends DragListener {

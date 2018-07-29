@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 
+
 abstract public class Panel extends Group {
     public Panel(Image background) {
         this.background = background;
@@ -21,8 +22,10 @@ abstract public class Panel extends Group {
         return items;
     }
 
-    public void resize(float width, float height){
-        background.setBounds(0,0,width, height);
+    @Override
+    public void setBounds(float x, float y, float width, float height) {
+        super.setBounds(x, y, width, height);
+        background.setBounds(x, y, width, height);
     }
 
 }
