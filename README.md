@@ -5,4 +5,4 @@ Dreams Game LibGDX
 #Использование библиотеки libgdx
 
 Программа создает картинку из предоставленых элементов. Элементы можно добавлять, перемещать, вращать и изменять их размер.
-[Imgur](https://i.imgur.com/0XBdKb2m.png)
+![Imgur](https://i.imgur.com/0XBdKb2m.png)
