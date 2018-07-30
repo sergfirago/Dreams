@@ -7,4 +7,4 @@ Dreams Game LibGDX
 Программа создает картинку из предоставленых элементов. Элементы можно добавлять, перемещать, вращать и изменять их размер.
 
 
-![Imgur](https://i.imgur.com/0XBdKb2m.png)
+[![img](https://i.imgur.com/0XBdKb2m.png)](https://i.imgur.com/0XBdKb2b.png)
